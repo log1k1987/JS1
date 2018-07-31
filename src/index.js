@@ -22,7 +22,7 @@ function map(array, fn) {
     var newArr = [];
 
     for (var i = 0; i < array.length; i++) {
-        newArr[i] = fn(array[i], i, array);
+        newArr.push(fn(array[i], i, array));
     }
     
     return newArr;
@@ -35,15 +35,9 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
-    var i;
+    var i = (initial) ? 0 : 1;
 
-    if (!initial) {
-        i = 1;
-
-        initial=array[0];
-    } else {
-        i = 0;
-    }
+    initial = (!initial) ? array[0] : initial;
     
     for (; i < array.length; i++) {
         initial = fn(initial, array[i], i, array);
@@ -82,19 +76,11 @@ function upperProps(obj) {
 function slice(array, from = 0, to = array.length) {
     var newArr = [];
    
-    if (to < 0) {
-        to = array.length + to;
-    }
-    if (from < -array.length) {
-        from = 0;
-    }
-    if (from < 0) {
-        from = array.length + from;
-    }
-    if (to > array.length) {
-        to = array.length;
-    }
-   
+    to = (to < 0) ? array.length + to: to;
+    from = (from < -array.length) ? 0: from;
+    from = (from < 0) ? array.length + from: from;
+    to = (to > array.length) ? array.length: to;
+    
     if (to < from) {
         return newArr;
     }
@@ -112,6 +98,13 @@ function slice(array, from = 0, to = array.length) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    var handler = {
+        set: function(target, propertyName, value) {
+            return target[propertyName] = value * value;
+        }
+    }
+   
+    return new Proxy(obj, handler);
 }
 
 export {
