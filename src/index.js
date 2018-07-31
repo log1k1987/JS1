@@ -81,9 +81,6 @@ function slice(array, from = 0, to = array.length) {
     from = (from < 0) ? array.length + from: from;
     to = (to > array.length) ? array.length: to;
     
-    if (to < from) {
-        return newArr;
-    }
     for (let i = from; i < to; i++) {
         newArr.push(array[i]);
     }    
@@ -100,7 +97,8 @@ function slice(array, from = 0, to = array.length) {
 function createProxy(obj) {
     const handler = {
         set: function(target, propertyName, value) {
-            return target[propertyName] = value * value;
+            target[propertyName] = Math.pow(value, 2);
+            return true;
         }
     }
    
