@@ -99,7 +99,7 @@ function slice(array, from = 0, to = array.length) {
  */
 function createProxy(obj) {
     var handler = {
-        set: function(target, propertyName, value) {
+        set: function(target, propertyName, value, receiver) {
             return target[propertyName] = value * value;
         }
     }
