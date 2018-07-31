@@ -113,26 +113,27 @@ function returnBadArguments(fn, ...args) {
  */
 
 //  Вариант №1
+/*
 function calculator(number = 0) {
     if (typeof number !== 'number') {
         throw new Error('number is not a number');
     }
     var obj = {
-        sum: function ([...args]) {
+        sum: function (...args) {
             for (var i = 0; i < args.length; i++) {
                 number += args[i];
             }
             
             return number;
         },
-        dif: function ([...args]) {
+        dif: function (...args) {
             for (var i = 0; i < args.length; i++) {
                 number -= args[i];
             }
             
             return number;
         },
-        div: function ([...args]) {
+        div: function (...args) {
             for (var i = 0; i < args.length; i++) {
                 if (args[i] === 0) {
                     throw new Error('division by 0');
@@ -142,7 +143,7 @@ function calculator(number = 0) {
             
             return number;
         },
-        mul: function ([...args]) {
+        mul: function (...args) {
             for (var i = 0; i < args.length; i++) {
                 number *= args[i];
             }
@@ -153,28 +154,28 @@ function calculator(number = 0) {
   
     return obj;
 }
+*/
 
-/*
 function calculator(number = 0) {
     if (typeof number !== 'number') {
         throw new Error('number is not a number');
     }
     var obj = {
-        sum: function ([...args]) {
+        sum: function (...args) {
 
             return args.reduce(function(sum, current) {
                 return sum + current;
             }, number);
 
         },
-        dif: function ([...args]) {
+        dif: function (...args) {
             
             return args.reduce(function(dif, current) {
                 return dif - current;
             }, number);
             
         },
-        div: function ([...args]) {
+        div: function (...args) {
 
             return args.reduce(function(div, current) {
                 if (current === 0) {
@@ -185,7 +186,7 @@ function calculator(number = 0) {
             }, number);
             
         },
-        mul: function ([...args]) {
+        mul: function (...args) {
 
             return args.reduce(function(mul, current) {
                 return mul * current;
@@ -196,7 +197,7 @@ function calculator(number = 0) {
   
     return obj;
 }
-*/
+
 /* При решении задач, пострайтесь использовать отладчик */
 
 export {
