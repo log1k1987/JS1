@@ -23,7 +23,7 @@ function isAllTrue(array, fn) {
         throw new Error('fn is not a function');
     }
 
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         if (!fn(array[i])) {
             return false;
         }
@@ -56,7 +56,7 @@ function isSomeTrue(array, fn) {
         throw new Error('fn is not a function');
     }
 
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         if (fn(array[i])) {
             return true;
         }
@@ -77,13 +77,13 @@ function isSomeTrue(array, fn) {
    - fn не является функцией (с текстом "fn is not a function")
  */
 function returnBadArguments(fn, ...args) {
-    var arr = [];
+    let arr = [];
     
     if (typeof fn !== 'function') {
         throw new Error('fn is not a function');
     }
   
-    for (var i = 0 ; i < args.length ; i++) {
+    for (let i = 0 ; i < args.length ; i++) {
         try {
             fn(args[i]);
         } catch (e) {
@@ -160,24 +160,13 @@ function calculator(number = 0) {
     if (typeof number !== 'number') {
         throw new Error('number is not a number');
     }
-    var obj = {
-        sum: function (...args) {
+    const obj = {
+        sum: (...args) => args.reduce((sum, current) => sum + current, number),
+        dif: (...args) => args.reduce((dif, current) => dif - current, number),
+        mul: (...args) => args.reduce((mul, current) => mul * current, number),
+        div: (...args) => {
 
-            return args.reduce(function(sum, current) {
-                return sum + current;
-            }, number);
-
-        },
-        dif: function (...args) {
-            
-            return args.reduce(function(dif, current) {
-                return dif - current;
-            }, number);
-            
-        },
-        div: function (...args) {
-
-            return args.reduce(function(div, current) {
+            return args.reduce((div, current) => {
                 if (current === 0) {
                     throw new Error('division by 0');
                 }
@@ -185,14 +174,8 @@ function calculator(number = 0) {
                 return div / current;
             }, number);
             
-        },
-        mul: function (...args) {
-
-            return args.reduce(function(mul, current) {
-                return mul * current;
-            }, number);
-            
         }
+       
     }
   
     return obj;
