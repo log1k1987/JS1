@@ -111,47 +111,40 @@ function returnBadArguments(fn, ...args) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
+
+//  Вариант №1
 function calculator(number = 0) {
     if (typeof number !== 'number') {
         throw new Error('number is not a number');
     }
     var obj = {
-        sum: function () {
-            for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
-                number += arguments[i];
+        sum: function ([...args]) {
+            for (var i = 0; i < args.length; i++) {
+                number += args[i];
             }
             
             return number;
         },
-        dif: function () {
-            for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
-                number -= arguments[i];
+        dif: function ([...args]) {
+            for (var i = 0; i < args.length; i++) {
+                number -= args[i];
             }
             
             return number;
         },
-        div: function () {
-            for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
+        div: function ([...args]) {
+            for (var i = 0; i < args.length; i++) {
+                if (args[i] === 0) {
                     throw new Error('division by 0');
                 }
-                number /= arguments[i];
+                number /= args[i];
             }
             
             return number;
         },
-        mul: function () {
-            for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
-                number *= arguments[i];
+        mul: function ([...args]) {
+            for (var i = 0; i < args.length; i++) {
+                number *= args[i];
             }
             
             return number;
@@ -161,6 +154,49 @@ function calculator(number = 0) {
     return obj;
 }
 
+/*
+function calculator(number = 0) {
+    if (typeof number !== 'number') {
+        throw new Error('number is not a number');
+    }
+    var obj = {
+        sum: function ([...args]) {
+
+            return args.reduce(function(sum, current) {
+                return sum + current;
+            }, number);
+
+        },
+        dif: function ([...args]) {
+            
+            return args.reduce(function(dif, current) {
+                return dif - current;
+            }, number);
+            
+        },
+        div: function ([...args]) {
+
+            return args.reduce(function(div, current) {
+                if (current === 0) {
+                    throw new Error('division by 0');
+                }
+                
+                return div / current;
+            }, number);
+            
+        },
+        mul: function ([...args]) {
+
+            return args.reduce(function(mul, current) {
+                return mul * current;
+            }, number);
+            
+        }
+    }
+  
+    return obj;
+}
+*/
 /* При решении задач, пострайтесь использовать отладчик */
 
 export {
