@@ -7,7 +7,7 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
 function forEach(array, fn) {
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         fn(array[i], i, array);
     }
 }
@@ -19,9 +19,9 @@ function forEach(array, fn) {
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
 function map(array, fn) {
-    var newArr = [];
+    let newArr = [];
 
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
         newArr.push(fn(array[i], i, array));
     }
     
@@ -35,7 +35,7 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
-    var i = (initial) ? 0 : 1;
+    let i = (initial) ? 0 : 1;
 
     initial = (!initial) ? array[0] : initial;
     
@@ -55,9 +55,9 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
-    var arr = [];
+    let arr = [];
 
-    for (var i in obj) {
+    for (let i in obj) {
         if (!obj.hasOwnProperty(i)) {
             continue;
         }
@@ -74,7 +74,7 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from = 0, to = array.length) {
-    var newArr = [];
+    let newArr = [];
    
     to = (to < 0) ? array.length + to: to;
     from = (from < -array.length) ? 0: from;
@@ -84,7 +84,7 @@ function slice(array, from = 0, to = array.length) {
     if (to < from) {
         return newArr;
     }
-    for (var i = from; i < to; i++) {
+    for (let i = from; i < to; i++) {
         newArr.push(array[i]);
     }    
   
@@ -98,8 +98,8 @@ function slice(array, from = 0, to = array.length) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
-    var handler = {
-        set: function(target, propertyName, value, receiver) {
+    const handler = {
+        set: function(target, propertyName, value) {
             return target[propertyName] = value * value;
         }
     }
