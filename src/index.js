@@ -11,9 +11,11 @@
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
 function createDivWithText(text) {
-  let newEl = document.createElement('div');
-  newEl.textContent = text;
-  return newEl;
+    let newEl = document.createElement('div');
+
+    newEl.textContent = text;
+    
+    return newEl;
 }
 
 /*
@@ -25,7 +27,7 @@ function createDivWithText(text) {
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
-  where.insertBefore(what, where.firstChild);
+    where.insertBefore(what, where.firstChild);
 }
 
 /*
@@ -48,14 +50,16 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-  let arr = [];
- for (let el of where.children) {
-   //console.log(el.tagName);
-   if(el.tagName === 'P') {
-      arr.push(el.previousElementSibling)
-   }
- }
- return arr;
+    let arr = [];
+
+    for (let el of where.children) {
+        // console.log(el.tagName);
+        if (el.tagName === 'P') {
+            arr.push(el.previousElementSibling)
+        }
+    }
+    
+    return arr;
 }
 
 /*
@@ -76,9 +80,9 @@ function findAllPSiblings(where) {
    findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
  */
 function findError(where) {
-    var result = [];
+    let result = [];
 
-    for (var child of where.children) {
+    for (let child of where.children) {
         result.push(child.innerText);
     }
 
@@ -98,21 +102,11 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
-  // for (var el of where.childNodes) {
-  //   if(el.nodeType === 3) {
-  //     console.log('нашел');
-  //   }
-  // }
-  for (let el of where.childNodes) {
-    if(el.nodeType === 3) {
-      where.removeChild(el);
+    for (let el of where.childNodes) {
+        if (el.nodeType === 3) {
+            where.removeChild(el);
+        }
     }
-  }
-  // for (var el of where.childNodes) {
-  //   if(el.nodeType === 3) {
-  //     console.log('нашел');
-  //   }
-  // }
 }
 
 /*
@@ -128,8 +122,14 @@ function deleteTextNodes(where) {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    for (let i = where.childNodes.length-1; i >= 0; i--) {
+        if (where.childNodes[i].nodeType === 3) {
+            where.removeChild(where.childNodes[i]);
+        } else if (where.childNodes[i].nodeType === 1) {
+            deleteTextNodesRecursive(where.childNodes[i]);
+        }
+    }
 }
-
 /*
  Задание 7 *:
 
@@ -151,6 +151,34 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
+    const stats = {
+        tags: {},
+        classes: {},
+        texts: 0
+    }
+
+    function recc(elem) {
+        for (let el of elem.childNodes) {
+            if (el.nodeType === 1) {
+                stats.tags[el.tagName] = stats.tags[el.tagName] ? ++stats.tags[el.tagName] : 1;
+
+                for (let i = 0; i < el.classList.length; i++) { 
+                    stats.classes[el.classList[i]] = stats.classes[el.classList[i]] ? ++stats.classes[el.classList[i]] : 1;
+                }
+                if (el.childNodes.length >= 0) {
+                    recc(el);
+                }
+       
+            } else if (el.nodeType === 3) {
+                stats.texts++;
+            }
+        }
+
+    }
+    recc(root);
+
+    return stats;
+
 }
 
 /*

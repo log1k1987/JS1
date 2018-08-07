@@ -1,21 +1,35 @@
-function deleteTextNodes(where) {
-  for (var el of where.childNodes) {
-    if(el.nodeType === 3) {
-      console.log('нашел');
+function collectDOMStat(root) {
+    const stats = {
+        tags: {},
+        classes: {},
+        texts: 0
     }
-  }
-  for (var el of where.childNodes) {
-    if(el.nodeType === 3) {
-      where.removeChild(el);
+
+    function recc(elem) {
+        for (let el of elem.childNodes) {
+            if (el.nodeType === 1) {
+                stats.tags[el.tagName] = stats.tags[el.tagName] ? ++stats.tags[el.tagName] : 1;
+
+                for (let i = 0; i < el.classList.length; i++) { 
+                    stats.classes[el.classList[i]] = stats.classes[el.classList[i]] ? ++stats.classes[el.classList[i]] : 1;
+                }
+                if (el.childNodes.length >= 0) {
+                    recc(el);
+                }
+       
+            } else if (el.nodeType === 3) {
+                ++stats.texts;
+            }
+        }
+
     }
-  }
-  for (var el of where.childNodes) {
-    if(el.nodeType === 3) {
-      console.log('нашел');
-    }
-  }
+    recc(root);
+
+    return stats;
+
 }
 
-deleteTextNodes(document.body);
-//console.log(xz);
-//document.body.removeChild(document.getElementsByTagName('div')[0])
+let b = collectDOMStat(document.body);
+
+console.log(b);
+// console.log(++b.tags.DIV);
