@@ -33,7 +33,7 @@ function removeListener(eventName, target, fn) {
    skipDefault('click', document.querySelector('a')) // после вызова функции, клики на указанную ссылку не должны приводить к переходу на другую страницу
  */
 function skipDefault(eventName, target) {
-    target.addEventListener(eventName, (e) => e.preventDefault())
+    target.addEventListener(eventName, (e) => e.preventDefault());
 }
 
 /*
