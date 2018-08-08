@@ -53,7 +53,6 @@ function findAllPSiblings(where) {
     let arr = [];
 
     for (let el of where.children) {
-        // console.log(el.tagName);
         if (el.tagName === 'P') {
             arr.push(el.previousElementSibling)
         }
