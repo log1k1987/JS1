@@ -183,7 +183,7 @@ function collectDOMStat(root) {
 /*
  Задание 8 *:
 
- 8.1: Функция должна отслеживать добавление и удаление элементов внутри элемента переданного в параметре where
+ 8.1:
  Как только в where добавляются или удаляются элементы,
  необходимо сообщать об этом при помощи вызова функции переданной в параметре fn
 
@@ -213,6 +213,27 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+    let observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.addedNodes.length) {
+            fn({ type: 'insert', nodes: Array.prototype.slice.call(mutation.addedNodes) });
+          }
+          if (mutation.removedNodes.length) {
+            fn({ type: 'remove', nodes: Array.prototype.slice.call(mutation.removedNodes) });
+          }
+        });
+      });
+    
+      let config = {
+        attributes: true,
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributeOldValue: true,
+        characterDataOldValue: true
+      };
+    
+      observer.observe(where, config);
 }
 
 export {
