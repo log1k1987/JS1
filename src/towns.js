@@ -80,7 +80,7 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
-loadTowns().then( ( cities ) => {
+loadTowns().then((cities) => {
     // console.log(cities);
     loadingBlock.style.display = 'none';
     filterBlock.style.display = '';
@@ -90,20 +90,20 @@ loadTowns().then( ( cities ) => {
         filterResult.innerHTML = '';
         const val = e.target.value;
 
-        const citiesFiltered = cities.filter( ( c ) => {
-            return isMatching( c.name, val );
+        const citiesFiltered = cities.filter((c) => {
+            return isMatching(c.name, val);
         } );
 
         const frElement = document.createDocumentFragment();
 
-        for ( const city of citiesFiltered ) {
-            const div = document.createElement( 'div' );
+        for (const city of citiesFiltered) {
+            const div = document.createElement('div');
 
             div.textContent = city.name;
-            frElement.appendChild( div );
+            frElement.appendChild(div);
         }
         
-        filterResult.appendChild( frElement );
+        filterResult.appendChild(frElement);
 
         if (!e.target.value.length) {
             filterResult.innerHTML = '';
