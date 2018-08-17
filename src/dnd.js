@@ -27,6 +27,21 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
+    function rnd(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    const div = document.createElement('div');
+
+    div.classList.add('draggable-div');
+    div.style.cursor = 'move';
+    div.style.position = 'relative';
+    div.style.width = rnd(0, 300) + 'px';
+    div.style.height = rnd(0, 300) + 'px';
+    div.style.backgroundColor = 'rgb('+rnd(0, 255)+','+rnd(0, 255)+','+rnd(0, 255)+')';
+    div.style.top = rnd(0, 300) + 'px';
+    div.style.left = rnd(0, 300) + 'px';
+
+    return div;
 }
 
 /*
@@ -38,6 +53,32 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
+    let startX,
+        startY,
+        dragStartX,
+        dragStartY,
+        currentElement;
+
+    target.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+
+        currentElement = e.target;
+        startX = parseInt(currentElement.style.left);
+        startY = parseInt(currentElement.style.top); 
+        dragStartX = e.clientX; 
+        dragStartY = e.clientY; 
+    });
+
+    target.addEventListener('mousemove', function(e) {
+        if (currentElement) {
+            currentElement.style.left = startX - (dragStartX - e.clientX) + 'px';
+            currentElement.style.top = startY - (dragStartY - e.clientY) + 'px'; 
+        }
+    });
+
+    target.addEventListener('mouseup', function() {
+        currentElement = null;
+    });
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
