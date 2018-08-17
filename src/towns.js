@@ -37,6 +37,23 @@ const homeworkContainer = document.querySelector('#homework-container');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
+    return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.responseType = 'json';
+        xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json', true);
+        xhr.send();
+        xhr.addEventListener('load', () => {
+            resolve(xhr.response.sort((a, b) => {
+                if (a.name < b.name ) {
+                    return -1;
+                } else if (a.name > b.name) {
+                    return 1; 
+                }
+           
+            }));
+        })
+    })
 }
 
 /*
@@ -51,6 +68,7 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
+    return full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1;
 }
 
 /* Блок с надписью "Загрузка" */
@@ -62,10 +80,36 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
-filterInput.addEventListener('keyup', function() {
-    // это обработчик нажатия кливиш в текстовом поле
-});
+loadTowns().then( ( cities ) => {
+    // console.log(cities);
+    loadingBlock.style.display = 'none';
+    filterBlock.style.display = '';
 
+    filterInput.addEventListener('keyup', (e) => {
+    // это обработчик нажатия кливиш в текстовом поле
+        filterResult.innerHTML = '';
+        const val = e.target.value;
+
+        const citiesFiltered = cities.filter( ( c ) => {
+            return isMatching( c.name, val );
+        } );
+
+        const frElement = document.createDocumentFragment();
+
+        for ( const city of citiesFiltered ) {
+            const div = document.createElement( 'div' );
+
+            div.textContent = city.name;
+            frElement.appendChild( div );
+        }
+        
+        filterResult.appendChild( frElement );
+
+        if (!e.target.value.length) {
+            filterResult.innerHTML = '';
+        }
+    });
+} );
 export {
     loadTowns,
     isMatching
