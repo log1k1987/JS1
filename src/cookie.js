@@ -49,4 +49,18 @@ filterNameInput.addEventListener('keyup', function() {
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
+    let tr = document.createElement('tr'),
+    current = addNameInput.value;
+    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+    tr.innerHTML = '<td>' +addNameInput.value+ '</td><td>'+addValueInput.value+'</td><td><button class="delButton">удалить</button></td>';
+    listTable.appendChild(tr);
+    tr.addEventListener('click', (e) => {
+      if(e.target.className === 'delButton') {
+        listTable.removeChild(tr);
+        document.cookie = current += "=; expires=" + new Date(0);
+      }
+    });
+      
+    addNameInput.value = '';
+    addValueInput.value = '';
 });
