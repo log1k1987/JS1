@@ -33,8 +33,8 @@ function createDiv() {
     const div = document.createElement('div');
 
     div.classList.add('draggable-div');
-    div.style.cursor = 'move';
-    div.style.position = 'relative';
+    div.setAttribute('draggable', true)
+    div.style.position = 'absolute';
     div.style.width = rnd(0, 300) + 'px';
     div.style.height = rnd(0, 300) + 'px';
     div.style.backgroundColor = 'rgb('+rnd(0, 255)+','+rnd(0, 255)+','+rnd(0, 255)+')';
@@ -51,7 +51,7 @@ function createDiv() {
    const newDiv = createDiv();
    homeworkContainer.appendChild(newDiv);
    addListeners(newDiv);
- */
+ 
 function addListeners(target) {
     let startX,
         startY,
@@ -61,8 +61,8 @@ function addListeners(target) {
 
     target.addEventListener('mousedown', function(e) {
         e.preventDefault();
-
         currentElement = e.target;
+        currentElement.style.zIndex = '1000';
         startX = parseInt(currentElement.style.left);
         startY = parseInt(currentElement.style.top); 
         dragStartX = e.clientX; 
@@ -76,9 +76,48 @@ function addListeners(target) {
         }
     });
 
-    target.addEventListener('mouseup', function() {
-        currentElement = null;
+    target.addEventListener('mouseup', function(e) {
+        if (currentElement) {
+            e.preventDefault();
+            currentElement.style.zIndex = 'initial';
+            currentElement = null;
+        }
     });
+}
+*/
+
+function addListeners(target) {
+    let startX,
+        startY,
+        dragStartX,
+        dragStartY,
+        currentDrag;
+
+    target.addEventListener('dragstart', (e) => {
+        currentDrag = e.target;
+        currentDrag.style.zIndex = '1000';
+        startX = parseInt(currentDrag.style.left);
+        startY = parseInt(currentDrag.style.top); 
+        dragStartX = e.clientX; 
+        dragStartY = e.clientY; 
+    });
+
+    target.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (currentDrag) {
+            currentDrag.style.left = startX - (dragStartX - e.clientX) + 'px';
+            currentDrag.style.top = startY - (dragStartY - e.clientY) + 'px'; 
+        }
+    });
+
+    target.addEventListener('drop', (e) => {
+        if (currentDrag) {
+            e.preventDefault();
+            currentDrag.style.zIndex = 'initial';
+            currentDrag = null;
+        }
+    });
+                
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
