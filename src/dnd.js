@@ -51,7 +51,7 @@ function createDiv() {
    const newDiv = createDiv();
    homeworkContainer.appendChild(newDiv);
    addListeners(newDiv);
- 
+ */
 function addListeners(target) {
     let startX,
         startY,
@@ -69,11 +69,10 @@ function addListeners(target) {
         dragStartY = e.clientY; 
     });
 
-    target.addEventListener('mousemove', function(e) {
-        if (currentElement) {
-            currentElement.style.left = startX - (dragStartX - e.clientX) + 'px';
-            currentElement.style.top = startY - (dragStartY - e.clientY) + 'px'; 
-        }
+    document.addEventListener('mousemove', function(e) {
+        e.preventDefault();
+        currentElement.style.left = startX - (dragStartX - e.clientX) + 'px';
+        currentElement.style.top = startY - (dragStartY - e.clientY) + 'px'; 
     });
 
     target.addEventListener('mouseup', function(e) {
@@ -84,8 +83,8 @@ function addListeners(target) {
         }
     });
 }
-*/
 
+/*
 function addListeners(target) {
     let startX,
         startY,
@@ -119,7 +118,7 @@ function addListeners(target) {
     });
                 
 }
-
+*/
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
 addDivButton.addEventListener('click', function() {
