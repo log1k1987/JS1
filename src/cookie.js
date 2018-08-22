@@ -43,9 +43,49 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+listCookie();
+
 filterNameInput.addEventListener('keyup', function() {
-    // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+    listCookie();
 });
+
+function listCookie() {
+    let cookie = getCookie();
+    let chunk = filterNameInput.value;
+
+    if (chunk) {
+        listTable.innerHTML='';
+        if (cookie) {
+            Object.keys(cookie).forEach(item => {
+                if (isMatching(cookie[item], chunk) || isMatching(item, chunk)) {
+                    cookieRow(item, cookie[item]);
+                }
+            });   
+        }
+        
+    }
+    if (!chunk.length) {
+        listTable.innerHTML='';
+        if (cookie) {
+            Object.keys(cookie).forEach(item => {
+                cookieRow(item, cookie[item]);
+            });   
+        }
+    }
+}
+function cookieRow(name, value) {
+    let row = document.createElement('TR');
+
+    row.className='row';
+    row.innerHTML = `<td>${name}</td><td>${value}</td><td><button>Удалить</button></td>`;
+    listTable.appendChild(row);
+    row.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            listTable.removeChild(row);
+            delCook(name);
+        }
+    });
+}
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
@@ -54,7 +94,6 @@ addButton.addEventListener('click', () => {
         cookie = getCookie();
     
     if (cookName && cookValue) {
-        let tr = document.createElement('tr');
 
         if (cookie[cookName]) { // 
             delCook(cookie[cookName]);
@@ -62,16 +101,8 @@ addButton.addEventListener('click', () => {
         }
         document.cookie = `${cookName}=${cookValue}`;
     
-        tr.innerHTML = '<td>'+cookName+'</td><td>'+cookValue+'</td><td><button>удалить</button></td>';
-        listTable.appendChild(tr);
-
-        tr.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON') {
-                listTable.removeChild(tr);
-                delCook(cookName);
-            }
-        });
-          
+        cookieRow(cookName, cookValue);
+       
         addNameInput.value = '';
         addValueInput.value = '';
     }
@@ -85,7 +116,7 @@ function getCookie() {
       
         return prev;
     }, {});
-    
+
     return cookie;
 }
 
@@ -99,4 +130,7 @@ function delRow(rowName) {
             listTable.rows[i].cells[2].children[0].click();
         }
     }
+}
+function isMatching(full, chunk) {
+    return full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1;
 }
