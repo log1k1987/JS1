@@ -49,44 +49,6 @@ filterNameInput.addEventListener('keyup', function() {
     listCookie();
 });
 
-function listCookie() {
-    let cookie = getCookie();
-    let chunk = filterNameInput.value;
-
-    if (chunk) {
-        listTable.innerHTML='';
-        if (cookie) {
-            Object.keys(cookie).forEach(item => {
-                if (isMatching(cookie[item], chunk) || isMatching(item, chunk)) {
-                    cookieRow(item, cookie[item]);
-                }
-            });   
-        }
-        
-    }
-    if (!chunk.length) {
-        listTable.innerHTML='';
-        if (cookie) {
-            Object.keys(cookie).forEach(item => {
-                cookieRow(item, cookie[item]);
-            });   
-        }
-    }
-}
-function cookieRow(name, value) {
-    let row = document.createElement('TR');
-
-    row.className='row';
-    row.innerHTML = `<td>${name}</td><td>${value}</td><td><button>Удалить</button></td>`;
-    listTable.appendChild(row);
-    row.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            listTable.removeChild(row);
-            delCook(name);
-        }
-    });
-}
-
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
     let cookName = addNameInput.value,
@@ -107,6 +69,48 @@ addButton.addEventListener('click', () => {
         addValueInput.value = '';
     }
 });
+
+function listCookie() {
+    let cookie = getCookie();
+    let chunk = filterNameInput.value;
+
+    if (chunk) {
+        listTable.innerHTML='';
+        if (cookie) {
+            for (let item in cookie) {
+                if (cookie.hasOwnProperty(item)) {
+                    if (isMatching(cookie[item], chunk) || isMatching(item, chunk)) {
+                        cookieRow(item, cookie[item]);
+                    }
+                }
+            }
+        }
+    }
+
+    if (!chunk.length) {
+        listTable.innerHTML='';
+        if (cookie) {
+            for (let item in cookie) {
+                if (cookie.hasOwnProperty(item)) {
+                    cookieRow(item, cookie[item]);
+                }
+            }
+        }
+    }
+}
+
+function cookieRow(name, value) {
+    let row = document.createElement('TR');
+
+    row.innerHTML = `<td>${name}</td><td>${value}</td><td><button>Удалить</button></td>`;
+    listTable.appendChild(row);
+    row.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            listTable.removeChild(row);
+            delCook(name);
+        }
+    });
+}
 
 function getCookie() {
     let cookie = document.cookie.split('; ').reduce((prev, current) => {
