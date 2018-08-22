@@ -49,18 +49,54 @@ filterNameInput.addEventListener('keyup', function() {
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
-    let tr = document.createElement('tr'),
-    current = addNameInput.value;
-    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
-    tr.innerHTML = '<td>' +addNameInput.value+ '</td><td>'+addValueInput.value+'</td><td><button class="delButton">удалить</button></td>';
-    listTable.appendChild(tr);
-    tr.addEventListener('click', (e) => {
-      if(e.target.className === 'delButton') {
-        listTable.removeChild(tr);
-        document.cookie = current += "=; expires=" + new Date(0);
-      }
-    });
-      
-    addNameInput.value = '';
-    addValueInput.value = '';
+    let cookName = addNameInput.value,
+        cookValue = addValueInput.value,
+        cookie = getCookie();
+    
+    if (cookName && cookValue) {
+        let tr = document.createElement('tr');
+
+        if (cookie[cookName]) { // 
+            delCook(cookie[cookName]);
+            delRow(cookie[cookName]);
+        }
+        document.cookie = `${cookName}=${cookValue}`;
+    
+        tr.innerHTML = '<td>'+cookName+'</td><td>'+cookValue+'</td><td><button>удалить</button></td>';
+        listTable.appendChild(tr);
+
+        tr.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                listTable.removeChild(tr);
+                delCook(cookName);
+            }
+        });
+          
+        addNameInput.value = '';
+        addValueInput.value = '';
+    }
 });
+
+function getCookie() {
+    let cookie = document.cookie.split('; ').reduce((prev, current) => {
+        const [name, value] = current.split('=');
+      
+        prev[name]=value;
+      
+        return prev;
+    }, {});
+    
+    return cookie;
+}
+
+function delCook(cookName) {
+    document.cookie = cookName += '=; expires=' + new Date(0);
+}
+
+function delRow(rowName) {
+    for (let i = 0; i < listTable.rows.length; i++) {
+        if (rowName === listTable.rows[i].cells[0].textContent) {
+            listTable.rows[i].cells[2].children[0].click();
+        }
+    }
+}
