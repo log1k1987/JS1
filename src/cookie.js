@@ -79,8 +79,7 @@ let updateTable = filter => {
             row.addEventListener('click', () => {
                 document.cookie = cookie += '=; expires=' + new Date(0);
                 updateTable();
-            })
-
+            });
         }
     }
 }
@@ -98,6 +97,5 @@ addButton.addEventListener('click', () => {
         updateTable();
     }
 });
-
 
 updateTable();
