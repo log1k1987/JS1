@@ -43,61 +43,99 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-let addCookie = (name, value) => {
-    document.cookie = `${name}=${value}`;
-}
+listCookie();
 
-let getCookies = () => {
-    if (document.cookie) {
-        let cookie = document.cookie.split('; ').reduce((prev, current) => {
-            const [name, value] = current.split('=');
-
-            prev[name] = value;
-
-            return prev;
-        }, {});
-
-        return cookie;
-    }
-}
-
-let updateTable = filter => {
-    let cookies = getCookies();
-
-    filter = filterNameInput.value;
-
-    listTable.innerHTML = '';
-
-    for (let cookie in cookies) {
-
-        if (!filter || cookie.indexOf(filter) !== -1 || cookies[cookie].indexOf(filter) !== -1) {
-            let row = document.createElement('TR');
-
-            row.innerHTML = `<td>${cookie}</td><td>${cookies[cookie]}</td><td><button>Удалить</button></td>`;
-            listTable.appendChild(row);
-
-            row.addEventListener('click', () => {
-                document.cookie = cookie += '=; expires=' + new Date(0);
-                updateTable();
-            })
-
-        }
-    }
-}
-
-filterNameInput.addEventListener('keyup', function () {
-    updateTable();
+filterNameInput.addEventListener('keyup', () => {
+  listCookie();
 });
 
 addButton.addEventListener('click', () => {
-    let cookName = addNameInput.value,
-        cookValue = addValueInput.value;
+  // здесь можно обработать нажатие на кнопку "добавить cookie"
+  let cookName = addNameInput.value,
+    cookValue = addValueInput.value,
+    cookie = getCookie();
 
-    if (cookName && cookValue) {
-        addCookie(cookName, cookValue);
-        updateTable();
+  if (cookName && cookValue) {
+
+    if (cookie[cookName]) { // 
+      delCook(cookie[cookName]);
+      delRow(cookie[cookName]);
     }
+    document.cookie = `${cookName}=${cookValue}`;
+
+    cookieRow(cookName, cookValue);
+
+    addNameInput.value = '';
+    addValueInput.value = '';
+  }
 });
 
+function listCookie() {
+  let cookie = getCookie();
+  let chunk = filterNameInput.value;
 
-updateTable();
+  if (chunk) {
+    listTable.innerHTML = '';
+    if (cookie) {
+      for (let item in cookie) {
+        if (cookie.hasOwnProperty(item)) {
+          if (isMatching(cookie[item], chunk) || isMatching(item, chunk)) {
+            cookieRow(item, cookie[item]);
+          }
+        }
+      }
+    }
+  }
+
+  if (!chunk.length) {
+    listTable.innerHTML = '';
+    if (cookie) {
+      for (let item in cookie) {
+        if (cookie.hasOwnProperty(item)) {
+          cookieRow(item, cookie[item]);
+        }
+      }
+    }
+  }
+}
+
+function cookieRow(name, value) {
+  let row = document.createElement('TR');
+
+  row.innerHTML = `<td>${name}</td><td>${value}</td><td><button>Удалить</button></td>`;
+  listTable.appendChild(row);
+  row.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      listTable.removeChild(row);
+      delCook(name);
+    }
+  });
+}
+
+function getCookie() {
+  let cookie = document.cookie.split('; ').reduce((prev, current) => {
+    const [name, value] = current.split('=');
+
+    prev[name] = value;
+
+    return prev;
+  }, {});
+
+  return cookie;
+}
+
+function delCook(cookName) {
+  document.cookie = cookName += '=; expires=' + new Date(0);
+}
+
+function delRow(rowName) {
+  for (let i = 0; i < listTable.rows.length; i++) {
+    if (rowName === listTable.rows[i].cells[0].textContent) {
+      listTable.rows[i].cells[2].children[0].click();
+    }
+  }
+}
+
+function isMatching(full, chunk) {
+  return full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1;
+}
