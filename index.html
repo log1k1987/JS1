@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Friends filter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://vk.com/js/api/openapi.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <div class="panel panel-friends">
+        <img src="img/logo.png" class="panel-logo" />
+        <div class="panel-heading">
+            <h3 class="panel-title">Выберите друзей</h3>
+            <span><i class="fa fa-times"></i></span>
+        </div>
+        <div class="panel-body" data-content="friends-panel">
+            <div class="panel-list left">
+                <div class="panel-search">
+                    <input type="text" id="searchInLeft" placeholder="Начните вводить имя друга" />
+                    <label for="searchInLeft">
+                        <i class="fa fa-search"></i>
+                    </label>
+                </div>
+                <div class="container" data-list="left">
+                    <div class="list-name">Ваши друзья</div>
+                </div>
+            </div>
+            <div class="panel-list right">
+                <div class="panel-search">
+                    <input type="text" id="searchInRight" placeholder="Начните вводить имя друга" />
+                    <label for="searchInRight">
+                        <i class="fa fa-search"></i>
+                    </label>
+                </div>
+                <div class="container" data-list="right">
+                    <div class="list-name">Друзья в списке</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button id="saveButton" class="button">Сохранить</button>
+        </div>
+    </div>
+    <script src="js/js.js"></script>
+    <script id="friendsLi" type="text/x-handlebars-template">
+        {{#each friend}}
+                <li>
+                    {{#if no_match}}
+                        <div class="friend">
+                            <span>{{no_match}}</span>
+                        </div>
+                    {{else}}
+                        <div class="friend" data-id="{{uid}}">
+                            <img src="{{photo_50}}" />
+                            <span>{{first_name}} {{last_name}}</span>
+                        </div>
+                        {{#if filtered}}
+                            <span><i class="fa fa-times"></i></span>
+                        {{else}}
+                            <span><i class="fa fa-plus"></i></span>
+                        {{/if}}
+                    {{/if}}
+                </li>
+            {{/each}}
+        </script>
+</body>
+
+</html>
