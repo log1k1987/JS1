@@ -248,7 +248,10 @@ new Promise(resolve => {
             friendsList = response;
         }
 
-        showFriendsList(friendsList, 'left');
+        //showFriendsList(friendsList, 'left');
+        if (friendsList.length) {
+            showFriendsList(friendsList, 'left');
+        }
         if (friendsFiltered.length) {
             showFriendsList(friendsFiltered, 'right');
         }
