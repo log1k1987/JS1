@@ -84,13 +84,14 @@ new Promise(resolve => {
         let removeFriendsList = side => {
             let container = document.querySelector(`[data-list=${side}]`),
                 list = container.children[1];
+            console.log(container.children[1]);
             list.remove();
         };
 
         // Поиск друзей
         let searchInList = e => {
-            let search = e.target;
-
+            let search = e.target || e;
+            console.log(search);
             // @param list - массив друзей
             // @param side - left или right
             let localSearch = (list, side) => {
@@ -109,7 +110,8 @@ new Promise(resolve => {
                 }
                 return list;
             };
-
+            //console.log(searchInLeft);
+            //console.log(search);
             // где ищем
             if (search === searchInLeft) {
                 friendsList = localSearch(friendsList, 'left');
@@ -153,8 +155,10 @@ new Promise(resolve => {
             // определяем направление
             if (elem.classList.contains('fa-plus')) {
                 [friendsFiltered, friendsList] = localToggle(friendsFiltered, friendsList, 'right', 'left');
+                searchInList(searchInRight);
             } else if (elem.classList.contains('fa-times')) {
                 [friendsList, friendsFiltered] = localToggle(friendsList, friendsFiltered, 'left', 'right');
+                searchInList(searchInLeft);
             }
         };
 
@@ -248,6 +252,7 @@ new Promise(resolve => {
         if (friendsFiltered.length) {
             showFriendsList(friendsFiltered, 'right');
         }
+
         searchInLeft.addEventListener('input', searchInList);
         searchInRight.addEventListener('input', searchInList);
         friendsPanel.addEventListener('click', toggleFriend);
@@ -256,7 +261,6 @@ new Promise(resolve => {
         document.body.addEventListener('mousedown', captureFriend);
         document.body.addEventListener('mousemove', moveFriend);
         document.body.addEventListener('mouseup', releaseFriend);
-
         closeButton.addEventListener('click', logout);
     })
     .catch(error => {
