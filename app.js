@@ -140,7 +140,6 @@ function onButtonChange(coords) {
         placeElem = document.querySelector('.review__place'),
         commentElem = document.querySelector('.review__comment'),
         item = information[`${coords[0]}-${coords[1]}`],
-        date = new Date().toLocaleString(),
         arr = item.reviews || [];
 
     buttonAdd.addEventListener('click', () => {
@@ -153,7 +152,7 @@ function onButtonChange(coords) {
         review.name = nameElem.value;
         review.place = placeElem.value;
         review.comment = commentElem.value;
-        review.date = date;
+        review.date = new Date().toLocaleString();
         arr.push(review);
 
         item.reviews = arr;
@@ -175,12 +174,13 @@ function onButtonChange(coords) {
 function createPlacemark(coords) {
     let item = information[`${coords[0]}-${coords[1]}`],
         dataCoords = `${coords[0]}-${coords[1]}`,
+        lastReview = item.reviews.length - 1,
         placeMarkData = {
-            balloonContentHeader: `${item.reviews[0].name}`,
+            balloonContentHeader: `${item.reviews[lastReview].name}`,
             balloonContentBody: `<a href="#" class="clusters-link" data-coords="${dataCoords}">${item.address}</a>${
-                item.reviews[0].comment
+                item.reviews[lastReview].comment
             }`,
-            balloonContentFooter: `${item.reviews[0].date}`,
+            balloonContentFooter: `${item.reviews[lastReview].date}`,
         },
         options = {
             openBalloonOnClick: false,
